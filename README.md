@@ -11,3 +11,5 @@
 >
 >![](https://www.mathworks.com/help/examples/nnet/win64/TrainConditionalGenerativeAdversarialNetworkCGANExample_02.png) <br>
 >圖片取自 [這裡](https://www.mathworks.com/help/deeplearning/ug/train-conditional-generative-adversarial-network.html)
+
+## 生成結果
