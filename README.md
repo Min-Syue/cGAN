@@ -8,5 +8,5 @@
 >$$\underset{G}{\min} \ \underset{D}{\max} \ V(D,G) = \mathbb{E}\_{x \sim p_{data}(x)} \left[ \log \ D(x|y) \right] + \mathbb{E}\_{z \sim p_{z}(z)} \left[\log \ (1 - D(x|y)) \right]$$
 >
 >可以注意到cGAN損失函數裡的 Discriminator 修改為 $D(x|y)$ (在 GAN 或 DCGAN 中，為 $D(x)$ )，而此一改動代表著不僅僅只將 noise 輸入給 Generator ，也代表不僅輸入圖片給 Discriminator ，而改動後的流程圖如下：
-
->![ggez](https://www.mathworks.com/help/examples/nnet/win64/TrainConditionalGenerativeAdversarialNetworkCGANExample_02.png)
+>
+>![Ref{https://www.mathworks.com/help/examples/nnet/win64/TrainConditionalGenerativeAdversarialNetworkCGANExample_02.png}](https://www.mathworks.com/help/examples/nnet/win64/TrainConditionalGenerativeAdversarialNetworkCGANExample_02.png)
