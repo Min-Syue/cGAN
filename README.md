@@ -10,4 +10,4 @@
 >可以注意到cGAN損失函數裡的 Discriminator 修改為 $D(x|y)$ (在 GAN 或 DCGAN 中，為 $D(x)$ )，而此一改動代表著不僅僅只將 noise 輸入給 Generator ，也代表不僅輸入圖片給 Discriminator ，而改動後的流程圖如下：
 >
 >![](https://www.mathworks.com/help/examples/nnet/win64/TrainConditionalGenerativeAdversarialNetworkCGANExample_02.png) <br>
->圖片取自 [這裡](https://www.google.com](https://www.mathworks.com/help/deeplearning/ug/train-conditional-generative-adversarial-network.html)
+>圖片取自 [這裡](https://www.mathworks.com/help/deeplearning/ug/train-conditional-generative-adversarial-network.html)
