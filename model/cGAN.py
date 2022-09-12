@@ -117,6 +117,8 @@ class cGAN:
     if have_noise:
         y_combined_data += 0.05 * tf.random.uniform(y_combined_data.shape)
 
+    predict_labes = self.Discriminator_model(combined_images)
+
     # 訓練discrimintor model
     with tf.GradientTape() as tape:
         predict_labes = self.Discriminator_model(combined_images)
