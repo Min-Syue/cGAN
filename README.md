@@ -9,4 +9,4 @@
 >
 >可以注意到cGAN損失函數裡的 Discriminator 修改為 $D(x|y)$ (在 GAN 或 DCGAN 中，為 $D(x)$ )，而此一改動代表著不僅僅只將 noise 輸入給 Generator ，也代表不僅輸入圖片給 Discriminator ，而改動後的流程圖如下：
 
-![](https://github.com/Min-Syue/cGAN/blob/main/photo_cGAN/photo_cifar/Images_Epochs_1.png)
+![ggez](https://github.com/Min-Syue/cGAN/blob/main/photo_cGAN/photo_cifar/Images_Epochs_1.png)
