@@ -50,33 +50,31 @@ if __name__ == '__main__':
     # 宣告模型
     model = cGAN(opt_g=Adam(learning_rate=0.0002, beta_1=0.5), opt_d=Adam(learning_rate=0.0002, beta_1=0.5), latent_size=latent_size_tp, num_class=10, channels=3, width=32, height=32)
 
+    # 藉由keras載入資料，並把資料做整理
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
     concat_x = np.concatenate([X_train, X_test], axis = 0)
     concat_y = np.concatenate([y_train, y_test], axis = 0)
 
-    output_train = concat_x
-
-    all_images = (output_train.astype("float32") - 127.5) / 127.5
+    # 將資料做正規化
+    all_images = (concat_x.astype("float32") - 127.5) / 127.5
     all_images = np.reshape(all_images, (-1, 32, 32, 3))
     all_labels = keras.utils.to_categorical(concat_y, 10)
     dataset = tf.data.Dataset.from_tensor_slices((all_images, all_labels))
-    # print(type(dataset))
+
+    # 使用tensorflow內建的dataset功能，幫助我們對資料進行隨機取樣
     dataset = dataset.shuffle(buffer_size=1024).batch(batch_size)
 
     plt.figure(figsize=(12,12))
 
+    # 開始訓練模型
     for e in range(epochs):
-        print('\nEpochs %d' % (e+1))
 
-        Every_batch_d_loss, Every_batch_g_loss = 0, 0
+        print('\nEpochs %d' % (e+1))
 
         for itr, data in enumerate(dataset):
             
             d_loss, g_loss, generated_images = model.train_step(data, batch_size=batch_size, have_noise=False)
-
-            Every_batch_d_loss += d_loss
-            Every_batch_g_loss += g_loss
 
             if itr % loss_output_size == 0:
                 print ('Itr: %d, [Discriminator :: d_loss: %f], [ Generator :: loss: %f]' % (itr, d_loss, g_loss))
