@@ -3,9 +3,6 @@ from keras.layers import LeakyReLU
 
 import tensorflow as tf
 
-def wloss(y_true, y_pred):
-    return tf.reduce_mean(y_true * y_pred)
-
 class cGAN:
   def __init__(self , opt_g, opt_d, latent_size=100 ,width=28, height=28, num_class=10, channels=1):
     
