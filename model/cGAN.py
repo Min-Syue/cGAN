@@ -1,4 +1,4 @@
-from keras.layers import Input, Dense, Reshape, Conv2D, Conv2DTranspose, Flatten, Dropout
+from keras.layers import Input, Dense, Reshape, Conv2D, Conv2DTranspose, Flatten, Dropout, GlobalMaxPooling2D
 from keras.layers import LeakyReLU
 
 import tensorflow as tf
@@ -32,26 +32,23 @@ class cGAN:
     self.Discriminator_model = self._bulit_Discri()
     self.Discriminator_model.summary()
 
-    # 將兩個網路併在一起
-    # self.stacked_generator_discriminator = self._stacked_generator_discriminator()
-
   def _bulit_generate(self):
 
     input = Input(shape=(self.generator_in_channels, ))
-    d1 = Dense(4 * 4 * 256)(input)
+    d1 = Dense(7 * 7 * self.generator_in_channels)(input)
     d1 = LeakyReLU(alpha=0.2)(d1)
-    d1_reshape = Reshape((4, 4, 256))(d1)
+    d1_reshape = Reshape((7, 7, self.generator_in_channels))(d1)
 
     Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(d1_reshape)
     Conv1 = LeakyReLU(alpha=0.2)(Conv1)
 
     Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(Conv1)
     Conv1 = LeakyReLU(alpha=0.2)(Conv1)
-
+    '''
     Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(Conv1)
     Conv1 = LeakyReLU(alpha=0.2)(Conv1)
-
-    out_image = Conv2D(3, (3, 3), padding="same", activation="tanh")(Conv1)
+    '''
+    out_image = Conv2D(1, (7, 7), padding="same", activation="sigmoid")(Conv1)
 
     generator = tf.keras.Model(inputs=input, outputs=out_image)
 
@@ -59,7 +56,7 @@ class cGAN:
 
   def _bulit_Discri(self):
     
-    input = Input(shape=(32, 32, self.discriminator_in_channels))
+    input = Input(shape=(28, 28, self.discriminator_in_channels))
 
     Conv1 = Conv2D(64, (3, 3), padding="same")(input)
     Conv1 = LeakyReLU(alpha=0.2)(Conv1)
@@ -67,6 +64,11 @@ class cGAN:
     Conv1 = Conv2D(128, (3, 3), strides=(2, 2), padding="same")(Conv1)
     Conv1 = LeakyReLU(alpha=0.2)(Conv1)
 
+    Conv1 = GlobalMaxPooling2D()(Conv1)
+    Flat = Flatten()(Conv1)
+    out_image = Dense(1)(Flat)
+
+    '''
     Conv1 = Conv2D(128, (3, 3), strides=(2, 2), padding="same")(Conv1)
     Conv1 = LeakyReLU(alpha=0.2)(Conv1)
 
@@ -76,7 +78,7 @@ class cGAN:
     Flat = Flatten()(Conv1)
     Drop = Dropout(0.4)(Flat)
     out_image = Dense(1)(Drop)
-
+    '''
     discrimintor = tf.keras.Model(inputs=input, outputs=out_image)
 
     return discrimintor
