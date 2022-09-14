@@ -15,4 +15,4 @@
 ## 生成結果
 > ### Mnist 結果
 > 每張數字圖片上的 label 代表要模型生成的數字，如第一張圖片(左上角) label 為4，則代表 Generator 要生成數字4的圖片！
->![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_50epochs.gif)
+>![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_50epochs_mnist.gif)
