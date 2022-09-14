@@ -4,7 +4,7 @@ from keras.layers import LeakyReLU
 import tensorflow as tf
 
 class cGAN:
-  def __init__(self , opt_g, opt_d, latent_size=100 ,width=28, height=28, num_class=10, channels=1):
+  def __init__(self , opt_g, opt_d, latent_size=100 ,width=28, height=28, num_class=10, channels=1, DataName='mnist'):
     
     # 定義各種參數
     self._latent_size = latent_size
@@ -12,6 +12,7 @@ class cGAN:
     self._height = height
     self._channels = channels
     self._num_class = num_class
+    self._Data_name = DataName
 
     # 輸入大小
     self.discriminator_in_channels = self._channels + self._num_class
@@ -34,57 +35,93 @@ class cGAN:
 
   def _bulit_generate(self):
 
-    input = Input(shape=(self.generator_in_channels, ))
-    d1 = Dense(7 * 7 * self.generator_in_channels)(input)
-    d1 = LeakyReLU(alpha=0.2)(d1)
-    d1_reshape = Reshape((7, 7, self.generator_in_channels))(d1)
+    if self._Data_name == 'mnist':
 
-    Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(d1_reshape)
-    Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+        input = Input(shape=(self.generator_in_channels, ))
+        d1 = Dense(7 * 7 * self.generator_in_channels)(input)
+        d1 = LeakyReLU(alpha=0.2)(d1)
+        d1_reshape = Reshape((7, 7, self.generator_in_channels))(d1)
 
-    Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(Conv1)
-    Conv1 = LeakyReLU(alpha=0.2)(Conv1)
-    '''
-    Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(Conv1)
-    Conv1 = LeakyReLU(alpha=0.2)(Conv1)
-    '''
-    out_image = Conv2D(1, (7, 7), padding="same", activation="sigmoid")(Conv1)
+        Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(d1_reshape)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
 
-    generator = tf.keras.Model(inputs=input, outputs=out_image)
+        Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(Conv1)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+        
+        out_image = Conv2D(1, (7, 7), padding="same", activation="sigmoid")(Conv1)
 
-    return generator
+        generator = tf.keras.Model(inputs=input, outputs=out_image)
+
+        return generator
+
+    elif self._Data_name == 'cifar10':
+
+        input = Input(shape=(self.generator_in_channels, ))
+        d1 = Dense(4 * 4 * self.generator_in_channels)(input)
+        d1 = LeakyReLU(alpha=0.2)(d1)
+        d1_reshape = Reshape((4, 4, self.generator_in_channels))(d1)
+
+        Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(d1_reshape)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+
+        Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(Conv1)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+        
+        Conv1 = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same")(Conv1)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+
+        out_image = Conv2D(3, (3, 3), padding="same", activation="tanh")(Conv1)
+
+        generator = tf.keras.Model(inputs=input, outputs=out_image)
+
+        return generator
 
   def _bulit_Discri(self):
     
-    input = Input(shape=(28, 28, self.discriminator_in_channels))
+    if self._Data_name == 'mnist':
 
-    Conv1 = Conv2D(64, (3, 3), padding="same")(input)
-    Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+        input = Input(shape=(28, 28, self.discriminator_in_channels))
 
-    Conv1 = Conv2D(128, (3, 3), strides=(2, 2), padding="same")(Conv1)
-    Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+        Conv1 = Conv2D(64, (3, 3), padding="same")(input)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
 
-    Conv1 = GlobalMaxPooling2D()(Conv1)
-    Flat = Flatten()(Conv1)
-    out_image = Dense(1)(Flat)
+        Conv1 = Conv2D(128, (3, 3), strides=(2, 2), padding="same")(Conv1)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
 
-    '''
-    Conv1 = Conv2D(128, (3, 3), strides=(2, 2), padding="same")(Conv1)
-    Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+        Conv1 = GlobalMaxPooling2D()(Conv1)
+        Flat = Flatten()(Conv1)
+        out_image = Dense(1)(Flat)
 
-    Conv1 = Conv2D(256, (3, 3), strides=(2, 2), padding="same")(Conv1)
-    Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+        discrimintor = tf.keras.Model(inputs=input, outputs=out_image)
 
-    Flat = Flatten()(Conv1)
-    Drop = Dropout(0.4)(Flat)
-    out_image = Dense(1)(Drop)
-    '''
-    discrimintor = tf.keras.Model(inputs=input, outputs=out_image)
+        return discrimintor
+    
+    elif self._Data_name == 'cifar10':
 
-    return discrimintor
+        input = Input(shape=(32, 32, self.discriminator_in_channels))
+
+        Conv1 = Conv2D(64, (3, 3), padding="same")(input)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+
+        Conv1 = Conv2D(128, (3, 3), strides=(2, 2), padding="same")(Conv1)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+
+        Conv1 = Conv2D(128, (3, 3), strides=(2, 2), padding="same")(Conv1)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+
+        Conv1 = Conv2D(256, (3, 3), strides=(2, 2), padding="same")(Conv1)
+        Conv1 = LeakyReLU(alpha=0.2)(Conv1)
+
+        Flat = Flatten()(Conv1)
+        Drop = Dropout(0.4)(Flat)
+        out_image = Dense(1)(Drop)
+
+        discrimintor = tf.keras.Model(inputs=input, outputs=out_image)
+
+        return discrimintor
 
   @tf.function
-  def train_step(self, data, batch_size=32, have_noise=True):
+  def train_step(self, data, have_noise=True):
 
     # 導入實際資料
     real_images, one_hot_labels = data
@@ -145,4 +182,4 @@ class cGAN:
     grads = tape.gradient(g_loss, self.Generate_model.trainable_weights)
     self.optimizer_g.apply_gradients(zip(grads, self.Generate_model.trainable_weights))
 
-    return d_loss, g_loss, generated_images
+    return d_loss, g_loss
