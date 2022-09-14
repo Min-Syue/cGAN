@@ -13,4 +13,5 @@
 >圖片取自 [這裡](https://www.mathworks.com/help/deeplearning/ug/train-conditional-generative-adversarial-network.html)
 
 ## 生成結果
+> ### Mnist 結果
 >![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_50epochs.gif)
