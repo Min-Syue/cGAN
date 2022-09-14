@@ -14,5 +14,5 @@
 
 ## 生成結果
 > ### Mnist 結果
-> 每張數字圖片上的label代表要模型生成的數字，如第一張圖片(左上角)
+> 每張數字圖片上的label代表要模型生成的數字，如第一張圖片(左上角)label為4，則代表Generator要生成數字4的圖片！
 >![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_50epochs.gif)
