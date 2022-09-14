@@ -1,6 +1,5 @@
 from keras.datasets import mnist, cifar10
 from model.cGAN import cGAN
-from model.funs import find_diff_label
 from keras.optimizers import Adam
 
 import keras
@@ -25,40 +24,41 @@ import numpy as np
 if __name__ == '__main__':
 
     # 設定每個隱向量的大小
-    latent_size_tp = 200
+    latent_size_tp = 128
 
     # 每隔幾步就輸出loss
     loss_output_size = 500
 
     # 設定訓練時的參數
     batch_size = 64
-    epochs = 120
+    epochs = 50
 
     # 宣告追蹤的數值之圖變化
     tracing_size = 49
     test_vector = tf.random.normal([tracing_size, latent_size_tp])
-    test_label = np.random.randint(0, 9, size=tracing_size)
-    test_label = tf.one_hot(test_label, 10)
+    test_label_np = np.random.randint(0, 9, size=tracing_size)
+    test_label = tf.one_hot(test_label_np, 10)
     test_vector = tf.concat(
         [test_vector, test_label], axis=1
     )
 
     # 宣告儲存圖片的名字
     my_path = os.path.abspath(os.path.dirname(__file__))
-    Images_name = my_path + '/photo_cGAN/photo_cifar_120/Images_Epochs_'
+    Images_name = my_path + '/photo_cGAN/photo_mnist/Images_Epochs_'
 
     # 宣告模型
-    model = cGAN(opt_g=Adam(learning_rate=0.0002, beta_1=0.5), opt_d=Adam(learning_rate=0.0002, beta_1=0.5), latent_size=latent_size_tp, num_class=10, channels=3, width=32, height=32)
+    model = cGAN(opt_g=Adam(learning_rate=0.0002, beta_1=0.5), opt_d=Adam(learning_rate=0.0002, beta_1=0.5), latent_size=latent_size_tp, num_class=10, channels=1, width=28, height=28)
 
     # 藉由keras載入資料，並把資料做整理
-    (X_train, y_train), (X_test, y_test) = cifar10.load_data()
+    (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
     concat_x = np.concatenate([X_train, X_test], axis = 0)
     concat_y = np.concatenate([y_train, y_test], axis = 0)
 
     # 將資料做正規化
-    all_images = (concat_x.astype("float32") - 127.5) / 127.5
-    all_images = np.reshape(all_images, (-1, 32, 32, 3))
+    # all_images = (concat_x.astype("float32") - 127.5) / 127.5
+    all_images = (concat_x.astype("float32")) / 255.0
+    all_images = np.reshape(all_images, (-1, 28, 28, 1))
     all_labels = keras.utils.to_categorical(concat_y, 10)
     dataset = tf.data.Dataset.from_tensor_slices((all_images, all_labels))
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
         for image_idx in range(tracing_size):
             plt.subplot(7, 7, image_idx+1) 
             plt.imshow(trace_save_image[image_idx], cmap='gray')
-            plt.title("label %d" % (image_idx+1))
+            plt.title("label %d" % (test_label_np[image_idx]))
 
         plt.tight_layout()
         plt.savefig(Images_name+str(e+1))

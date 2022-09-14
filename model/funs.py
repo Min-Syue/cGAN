@@ -1,5 +1,6 @@
 import numpy as np
 import imageio
+import os
 
 def find_diff_label(Train_data, label_data, label = 0):
 
@@ -10,18 +11,17 @@ def find_diff_label(Train_data, label_data, label = 0):
 
     return output_train
 
-def make_gif(input_adr, output_name, interval = 3, FPS = 0.8):
+def make_gif(input_adr, output_name, interval = 3, FPS = 0.8, top_range=151):
 
     file_names = []
     images = []
 
-    # my_path = os.path.abspath(os.path.dirname(__file__))
-    my_path = 'C:/Users/User/AI/GAN'
+    my_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     Images_name = my_path + input_adr 
 
     file_names.append(Images_name + str(1) + '.png')
 
-    for i in range(2, 151):
+    for i in range(2, top_range):
         if i % interval == 0:
             file_names.append(Images_name + str(i) + '.png')
 
