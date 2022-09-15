@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     # 設定訓練時的參數
     batch_size = 64
-    epochs = 50
+    epochs = 100
 
     # 宣告追蹤的數值之圖變化
     tracing_size = 49
