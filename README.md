@@ -19,5 +19,3 @@
 > ### Cifar10 結果
 > 在 Epoch 設定在50的前提下，可以觀察到RGB的圖片生成效果沒有黑白來的優秀，如第一張圖片(左上角) label 為0(狗)，可以大概看出狗的輪廓，但狗的鼻子、眼睛等五官都沒有生成出來。
 > ![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_50epochs_cifar.gif)
-> 將 Epoch 設定到100後，
-> ![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_100epochs_cifar.gif)
