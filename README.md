@@ -17,5 +17,5 @@
 > 每張數字圖片上的 label 代表要模型生成的數字，如第一張圖片(左上角) label 為4，則代表 Generator 要生成數字4的圖片！
 >![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_50epochs_mnist.gif)
 > ### Cifar10 結果
-> 在 Epoch 設定在50的前提下，可以觀察到RGB的圖片生成效果沒有黑白來的優秀，如第一張圖片(左上角) label 為0(狗)，可以大概看出狗的輪廓，但狗的鼻子、眼睛等五官都沒有生成出來。
+> 在 Epoch 設定在50的前提下，可以觀察到RGB的圖片生成效果沒有黑白來的優秀，許多圖能看出大概輪廓，但細節的地方生成不好。
 > ![](https://github.com/Min-Syue/cGAN/blob/main/cGAN_50epochs_cifar.gif)
