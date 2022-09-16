@@ -121,7 +121,7 @@ class cGAN:
         return discrimintor
 
   @tf.function
-  def train_step(self, data, have_noise=True):
+  def train_step(self, data):
 
     # 導入實際資料
     real_images, one_hot_labels = data
@@ -152,10 +152,6 @@ class cGAN:
 
     y_combined_data = tf.concat([tf.ones([real_images.shape[0], 1]), tf.zeros([real_images.shape[0], 1])], 0)
     
-    # 官網說這是一個很重要的方式?!(maybe很好收斂)
-    if have_noise:
-        y_combined_data += 0.05 * tf.random.uniform(y_combined_data.shape)
-
     predict_labes = self.Discriminator_model(combined_images)
 
     # 訓練discrimintor model

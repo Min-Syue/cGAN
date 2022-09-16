@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
         for itr, data in enumerate(dataset):
             
-            d_loss, g_loss = model.train_step(data, have_noise=False)
+            d_loss, g_loss = model.train_step(data)
 
             if itr % loss_output_size == 0:
                 print ('Itr: %d, [Discriminator :: d_loss: %f], [ Generator :: loss: %f]' % (itr, d_loss, g_loss))
